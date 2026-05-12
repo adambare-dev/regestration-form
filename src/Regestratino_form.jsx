@@ -5,6 +5,7 @@ import { BiColor } from 'react-icons/bi';
 import { MdEmail, MdLock } from 'react-icons/md';
 import { FaUser } from 'react-icons/fa';
 import { FaEye, FaEyeSlash, FaLock } from 'react-icons/fa';
+import Modal from './Modal'
 
 //validions
 function validateName(name) {
@@ -19,20 +20,31 @@ function validatePassword(password) {
 };
 
 function Regestratino_form() {
+    const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
         country: "",
-        agree: false
+        agree: false,
+        message: ""
 
     });
     const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+    /*   function closemodal() {
+          setIsOpen(prev => !prev);
+      } */
     function hundleChange(e) {
         const { name, type, value, checked } = e.target;
         setFormData(prev => {
             return { ...prev, [name]: type === "checkbox" ? checked : value }
         });
+        /*  if (name === "message") {
+             console.log(value);
+         } */
         //errors on real validation
         let errorMessage = "";
 
@@ -84,11 +96,50 @@ function Regestratino_form() {
         if (!formData.agree) {
             newError.agree = "you must accept terms"
         }
-        setErrors(newError);
+        const isFormValid = validateName(formData.name.trim())
+            && validateEmail(formData.email.trim())
+            && validatePassword(formData.password.trim())
+            && formData.agree && formData.country
+        //feild validation
+        if (!isFormValid) {
+            console.log("error happened");
+            setErrors(newError);
+            return;
+        }
+        setIsSubmitting(true);
+        console.log(formData);
+        //initial data
+        /*  const initial = {
+             name: "",
+             email: "",
+             password: "",
+             country: "",
+             agree: false,
+             message: ""
+         }; */
+        setFormData({
+            name: "",
+            email: "",
+            password: "",
+            country: "",
+            agree: false,
+            message: ""
+        });
+
+        setTimeout(() => {
+            setIsSubmitting(false);
+            setShowModal(true);
+
+        }, 2000)
+
     }
+    function hundleOnClose() {
+        setShowModal(false);
+    };
     const [showPassword, setShowPassword] = useState(false)
     return (
         <div>
+            {showModal && <Modal closemodal={hundleOnClose} />}
             <form action="" onSubmit={hundleSubmit}>
                 <h2>Register now</h2>
 
@@ -149,16 +200,24 @@ function Regestratino_form() {
                 <p>Country: <b>{formData.country}</b></p>
                 <p className='error-message'>{errors.country}</p>
 
-                <textarea name="" placeholder='wirte your message...'></textarea>
+                <textarea name="message" placeholder='wirte your message...'
+                    value={formData.message}
+                    onChange={hundleChange}
+
+                >
+
+                </textarea>
                 <input type="checkbox"
                     name='agree'
                     checked={formData.agree}
                     onChange={hundleChange}
                 />
                 <p style={{ color: "#41a7f0d8" }}>{errors.agree}</p>
-                <button typeof='submit'>submit</button>
+                <button typeof='submit' className='submit-btn' disabled={isSubmitting}>{isSubmitting ? "submitting..." : "submit"}</button>
 
             </form>
+          
+         
 
         </div>
     )
