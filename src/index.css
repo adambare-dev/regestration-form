@@ -131,7 +131,7 @@ form input {
 }
 
 select {
-  padding: .5rem 2rem;
+  padding: .8rem 2rem;
   margin-top: 1.5rem;
   width: 100%;
   border-color: green;
@@ -217,7 +217,8 @@ textarea {
   justify-content: center;
   align-items: center;
 }
-.modal-overly p{
+
+.modal-overly p {
   font-family: 'Courier New', Courier, monospace;
   line-height: 1.5;
   color: #ccc;
@@ -262,11 +263,17 @@ textarea {
 
   }
 
+  select {
+    padding: 2rem 2.15rem;
+    border-color: #aa3bff;
+  }
+
   textarea {
     margin: 2rem auto;
     padding: 1.5rem;
     font-size: 1.1rem;
     width: 80%;
+   
   }
 
   .submit-btn {
